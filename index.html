@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MISSION 3 — BUKTIKAN JEJAKMU</title>
+  <!-- Google Fonts: Cinzel untuk Judul Epic, Montserrat untuk Body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. VARIABLES & FULLSCREEN IFP/CHROMEBOOK RESPONSIVE THEME
+       ========================================================================== */
+    :root {
+      --bg-dark: #0b0e14;
+      --bg-card: rgba(18, 24, 38, 0.95);
+      --bg-card-border: rgba(212, 175, 55, 0.35);
+      --gold-primary: #d4af37;
+      --gold-light: #f3e5ab;
+      --gold-dark: #aa820a;
+      --orange-btn: linear-gradient(180deg, #d35400, #a04000);
+      --orange-btn-hover: linear-gradient(180deg, #e67e22, #d35400);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --success: #2ecc71;
+      --danger: #e74c3c;
+      --border-radius: 14px;
+      --font-title: 'Cinzel', serif;
+      --font-body: 'Montserrat', sans-serif;
+      --anim-speed: 0.25s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-body);
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at center, rgba(20, 30, 48, 0.85) 0%, rgba(11, 14, 20, 1) 100%),
+        radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 65%);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Container Utama Memenuhi Layar Fullscreen */
+    #game-container {
+      width: 98vw;
+      height: 96vh;
+      background: var(--bg-card);
+      border: 2px solid var(--bg-card-border);
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+      padding: 16px 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+
+    /* Header Control Bar */
+    .top-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 44px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      padding-bottom: 6px;
+      flex-shrink: 0;
+    }
+
+    .top-controls-left, .top-controls-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: var(--gold-light);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      transition: all var(--anim-speed);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+    }
+
+    .icon-btn:hover, .icon-btn:active {
+      background: rgba(212, 175, 55, 0.25);
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .volume-control label {
+      font-size: 0.8rem;
+      color: var(--gold-light);
+    }
+
+    .volume-slider {
+      width: 70px;
+      accent-color: var(--gold-primary);
+      cursor: pointer;
+    }
+
+    /* Standard Button Styles */
+    .btn {
+      background: var(--orange-btn);
+      color: #fff;
+      border: 1px solid var(--gold-primary);
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--anim-speed);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover:not(:disabled), .btn:active:not(:disabled) {
+      background: var(--orange-btn-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(211, 84, 0, 0.5);
+    }
+
+    .btn:disabled {
+      background: #334155;
+      border-color: #475569;
+      color: #94a3b8;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid #475569;
+      color: var(--text-main);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--text-muted);
+    }
+
+    /* Screen Views */
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      animation: fadeIn var(--anim-speed) ease-in-out;
+      padding-top: 8px;
+      height: calc(100% - 50px);
+      overflow: hidden;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ship-icon {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .ship-icon svg {
+      width: 44px;
+      height: 44px;
+      fill: var(--gold-primary);
+      filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+    }
+
+    .mission-header-group {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .mission-tag {
+      font-family: var(--font-title);
+      color: var(--gold-primary);
+      font-size: 1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    h1.hero-title {
+      font-family: var(--font-title);
+      text-align: center;
+      color: #ffffff;
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      line-height: 1.1;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(0, 0, 0, 0.8);
+      margin-bottom: 6px;
+    }
+
+    p.hero-subtitle {
+      text-align: center;
+      color: var(--gold-light);
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      text-align: center;
+      color: var(--gold-primary);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+    .info-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid var(--gold-primary);
+      background: rgba(212, 175, 55, 0.08);
+      padding: 5px 18px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      color: var(--gold-light);
+      margin: 0 auto 10px auto;
+      letter-spacing: 1px;
+    }
+
+    /* SCREEN 1: PILIHAN NEGARA */
+    .country-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 10px;
+      flex: 1;
+      align-content: center;
+    }
+
+    .country-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid rgba(212, 175, 55, 0.25);
+      border-radius: var(--border-radius);
+      padding: 20px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--anim-speed);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .country-card:hover, .country-card:active {
+      border-color: var(--gold-primary);
+      transform: translateY(-4px);
+      background: rgba(212, 175, 55, 0.12);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    }
+
+    .country-flag {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .country-name {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      letter-spacing: 1.5px;
+    }
+
+    /* SCREEN 2: VERIFIKASI PASSWORD */
+    .password-container {
+      max-width: 460px;
+      margin: auto;
+      text-align: center;
+      width: 100%;
+    }
+
+    .password-box {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 24px;
+      border-radius: var(--border-radius);
+      border: 2px solid var(--gold-primary);
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.3rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid var(--gold-primary);
+      color: #fff;
+      border-radius: 8px;
+      margin: 14px 0;
+      font-family: var(--font-title);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .pass-error-msg {
+      color: var(--danger);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 10px;
+      min-height: 18px;
+    }
+
+    /* SCREEN 3: SISTEM SOAL */
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      flex-shrink: 0;
+    }
+
+    .progress-wrapper {
+      flex: 1;
+      max-width: 320px;
+    }
+
+    .progress-bar-bg {
+      background: rgba(255, 255, 255, 0.12);
+      height: 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-primary));
+      height: 100%;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .progress-text {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-top: 3px;
+      text-align: right;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-tab {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      background: rgba(0, 0, 0, 0.5);
+      color: var(--text-muted);
+      font-family: var(--font-title);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--anim-speed);
+    }
+
+    .nav-tab.active {
+      border-color: var(--gold-primary);
+      background: var(--gold-primary);
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+    }
+
+    .nav-tab.completed:not(.active) {
+      border-color: var(--success);
+      color: var(--success);
+      background: rgba(46, 204, 113, 0.15);
+    }
+
+    /* Diberikan overflow-y auto agar isi soal bisa discroll jika melebihi area */
+    .question-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* Styling Scrollbar Khusus Area Soal */
+    .question-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .question-body::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+    .question-body::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, 0.4);
+      border-radius: 4px;
+    }
+    .question-body::-webkit-scrollbar-thumb:hover {
+      background: var(--gold-primary);
+    }
+
+    .stimulus-box {
+      background: rgba(0, 0, 0, 0.45);
+      border-left: 4px solid var(--gold-primary);
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      border-right: 1px solid rgba(212, 175, 55, 0.15);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: #f1f5f9;
+    }
+
+    .multi-hint {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ==========================================================================
+       STYLES DESAIN GRAFIK BATANG TEGAK (AMAT RAPI & COMPACT)
+       ========================================================================== */
+    .vertical-chart-box {
+      background: rgba(11, 14, 20, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 10px;
+      padding: 10px 14px 6px 14px;
+      margin: 8px auto;
+      max-width: 480px;
+      width: 100%;
+    }
+    .chart-title-v {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .v-chart-wrapper {
+      display: flex;
+      height: 125px;
+      position: relative;
+    }
+    .y-axis {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-right: 8px;
+      width: 55px;
+      border-right: 2px solid var(--gold-primary);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .bars-container {
+      flex: 1;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      padding-left: 6px;
+      position: relative;
+      background: linear-gradient(to top, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 100% 25%;
+    }
+    .v-bar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+      width: 20%;
+    }
+    .v-bar {
+      width: 100%;
+      max-width: 32px;
+      background: linear-gradient(180deg, var(--gold-primary), #d35400);
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 2px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #000;
+      transition: height 0.6s ease;
+      box-shadow: 0 -2px 8px rgba(212, 175, 55, 0.3);
+    }
+    .x-axis {
+      display: flex;
+      justify-content: space-around;
+      border-top: 2px solid var(--gold-primary);
+      margin-left: 55px;
+      padding-top: 4px;
+    }
+    .x-label {
+      width: 20%;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .option-item {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all var(--anim-speed);
+    }
+
+    .option-item:hover, .option-item:active {
+      border-color: rgba(212, 175, 55, 0.5);
+      background: rgba(212, 175, 55, 0.08);
+    }
+
+    .option-text {
+      flex: 1;
+      font-size: 0.88rem;
+      padding-right: 10px;
+    }
+
+    .tf-toggle {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-tf {
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all var(--anim-speed);
+    }
+
+    .btn-tf.selected-true {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+
+    .btn-tf.selected-false {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    .chk-option.selected {
+      border-color: var(--gold-primary);
+      background: rgba(212, 175, 55, 0.12);
+    }
+
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--gold-primary);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .custom-radio {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--gold-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .chk-option.selected .custom-checkbox {
+      background: var(--gold-primary);
+      color: #000;
+    }
+
+    .chk-option.selected .custom-checkbox::after {
+      content: '✓';
+      font-weight: bold;
+      font-size: 11px;
+    }
+
+    .chk-option.selected .custom-radio {
+      background: var(--gold-primary);
+    }
+
+    .chk-option.selected .custom-radio::after {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: #000;
+      border-radius: 50%;
+    }
+
+    .question-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .validation-alert {
+      background: rgba(231, 76, 60, 0.25);
+      border: 1.5px solid var(--danger);
+      color: #ff7675;
+      padding: 8px 14px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: none;
+      text-align: center;
+      line-height: 1.35;
+      flex-shrink: 0;
+    }
+
+    /* SCREEN 4: SUCCESS PAGE */
+    .success-box {
+      text-align: center;
+      max-width: 480px;
+      margin: auto;
+    }
+
+    .password-card {
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px dashed var(--gold-primary);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin: 16px 0;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+    }
+
+    .pass-val {
+      font-family: var(--font-title);
+      font-size: 3.2rem;
+      color: var(--gold-primary);
+      letter-spacing: 6px;
+      margin-top: 4px;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Modal Reset */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-card {
+      background: var(--bg-dark);
+      border: 2px solid var(--gold-primary);
+      padding: 22px;
+      border-radius: var(--border-radius);
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .country-grid { grid-template-columns: repeat(2, 1fr); }
+      h1.hero-title { font-size: 2rem; }
+      p.hero-subtitle { font-size: 0.85rem; }
+      .vertical-chart-box { max-width: 100%; }
+    }
+  </style>
+</head>
+<body onclick="startAudioEngine()">
+
+  <div id="game-container">
+    <!-- TOP CONTROL BAR -->
+    <div class="top-controls">
+      <div class="top-controls-left">
+        <button id="btn-back-global" class="icon-btn" onclick="handleGlobalBack()" style="display: none;">
+          ← Kembali
+        </button>
+      </div>
+      <div class="top-controls-right">
+        <div class="volume-control">
+          <label for="vol-slider">🔊</label>
+          <input type="range" id="vol-slider" class="volume-slider" min="0" max="1" step="0.05" value="0.5" oninput="changeVolume(this.value)">
+        </div>
+        <button id="btn-music" class="icon-btn" onclick="toggleMusic()">
+          🎵 Musik ON
+        </button>
+        <button id="btn-fullscreen" class="icon-btn" onclick="toggleFullscreen()">
+          ⛶ Fullscreen
+        </button>
+        <button id="btn-reset" class="icon-btn" onclick="showResetModal()">
+          ↻ Ulangi
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 1: PILIHAN NEGARA -->
+    <div id="screen-home" class="screen active">
+      <div>
+        <div class="ship-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M2,19C2,19 4,21 8,21C12,21 12,19 16,19 C20,19 22,21 22,21 M3,16 L21,16 L19,10 L5,10 Z M12,3 L12,10 M12,3 L16,6 L12,8 Z"/>
+          </svg>
+        </div>
+
+        <div class="mission-header-group">
+          <div class="mission-tag">MISSION 3</div>
+          <h1 class="hero-title">BUKTIKAN JEJAKMU</h1>
+          <p class="hero-subtitle">Uji pengetahuan, lanjutkan petualangan</p>
+        </div>
+        
+        <div style="text-align: center;">
+          <div class="info-pill">
+            <span>4 Bangsa</span> • <span>3 Soal Tantangan</span> • <span>1 Password</span>
+          </div>
+        </div>
+
+        <p class="subtitle">Pilih salah satu bangsa penjelajah di bawah ini untuk memulai:</p>
+      </div>
+
+      <div class="country-grid">
+        <div class="country-card" onclick="selectCountry('portugis')">
+          <span class="country-flag">🇵🇹</span>
+          <span class="country-name">PORTUGIS</span>
+        </div>
+        <div class="country-card" onclick="selectCountry('spanyol')">
+          <span class="country-flag">🇪🇸</span>
+          <span class="country-name">SPANYOL</span>
+        </div>
+        <div class="country-card" onclick="selectCountry('belanda')">
+          <span class="country-flag">🇳🇱</span>
+          <span class="country-name">BELANDA</span>
+        </div>
+        <div class="country-card" onclick="selectCountry('inggris')">
+          <span class="country-flag">🇬🇧</span>
+          <span class="country-name">INGGRIS</span>
+        </div>
+      </div>
+      <div></div>
+    </div>
+
+    <!-- SCREEN 2: VERIFIKASI PASSWORD -->
+    <div id="screen-password" class="screen">
+      <div></div>
+      <div class="password-container">
+        <h2>🔐 MASUKKAN PASSWORD MISI 3</h2>
+        <p class="subtitle">Gunakan password yang kamu dapatkan pada Misi 2.</p>
+
+        <div class="password-box">
+          <p id="pass-country-label" style="font-weight: 600; color: var(--gold-primary); margin-bottom: 5px; font-size: 1.1rem;"></p>
+          <input type="text" id="pass-input" class="password-input" placeholder="Ketik Password..." autocomplete="off" onkeyup="if(event.key==='Enter') verifyPassword()">
+          
+          <button class="btn" onclick="verifyPassword()" style="width: 100%;">MASUK MISI 3</button>
+          <div id="pass-error" class="pass-error-msg"></div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+
+    <!-- SCREEN 3: SISTEM SOAL -->
+    <div id="screen-questions" class="screen">
+      <div class="question-header">
+        <div class="progress-wrapper">
+          <div class="progress-bar-bg">
+            <div id="progress-bar" class="progress-bar-fill"></div>
+          </div>
+          <div id="progress-text" class="progress-text">0 / 3 SOAL SELESAI</div>
+        </div>
+        <div class="nav-tabs">
+          <button id="tab-0" class="nav-tab" onclick="switchQuestion(0)">1</button>
+          <button id="tab-1" class="nav-tab" onclick="switchQuestion(1)">2</button>
+          <button id="tab-2" class="nav-tab" onclick="switchQuestion(2)">3</button>
+        </div>
+      </div>
+
+      <div id="validation-alert" class="validation-alert"></div>
+
+      <div class="question-body">
+        <div id="stimulus-container"></div>
+        <div id="multi-hint" class="multi-hint" style="display: none;"></div>
+        <div id="options-container" class="options-container"></div>
+      </div>
+
+      <div class="question-footer">
+        <button id="btn-prev-q" class="btn btn-secondary" onclick="prevQuestion()">← Sebelumnya</button>
+        <button id="btn-next-q" class="btn" onclick="nextQuestion()">Berikutnya →</button>
+        <button id="btn-submit-q" class="btn" onclick="submitAnswers()" style="display: none;">🚀 KIRIM JAWABAN</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: HALAMAN KEMENANGAN -->
+    <div id="screen-success" class="screen">
+      <div></div>
+      <div class="success-box">
+        <div class="ship-icon" style="margin-bottom: 8px;">
+          <svg viewBox="0 0 24 24" style="width: 52px; height: 52px;">
+            <path d="M2,19C2,19 4,21 8,21C12,21 12,19 16,19 C20,19 22,21 22,21 M3,16 L21,16 L19,10 L5,10 Z M12,3 L12,10 M12,3 L16,6 L12,8 Z"/>
+          </svg>
+        </div>
+        <h1>MISI 3 BERHASIL!</h1>
+        <p class="subtitle">Kamu berhasil menyelesaikan seluruh tantangan penjelajahan dengan sempurna.</p>
+
+        <div class="password-card">
+          <p id="success-country-name" style="font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;"></p>
+          <p style="margin-top: 4px; font-weight: 600; color: var(--gold-light);">PASSWORD MISSION 4:</p>
+          <div id="mission4-password" class="pass-val">--</div>
+        </div>
+
+        <button class="btn" onclick="nextMission()" style="width: 100%; font-size: 0.95rem; padding: 12px;">
+          🚀 LANJUT KE MISSION 4
+        </button>
+      </div>
+      <div></div>
+    </div>
+
+  </div>
+
+  <!-- MODAL RESET -->
+  <div id="reset-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h2>KONFIRMASI RESET</h2>
+      <p style="margin-top: 8px; color: var(--text-muted); font-size: 0.9rem;">Yakin ingin mengulang Mission 3? Semua jawaban akan dihapus.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="hideResetModal()">Batal</button>
+        <button class="btn" onclick="confirmReset()">Ya, Ulangi</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================================================
+    // 1. GAME DATA & CONFIG
+    // ==========================================================================
+    const MISSION2_PASSWORDS = { portugis: "CE", spanyol: "A", belanda: "L", inggris: "NIS" };
+    const MISSION4_PASSWORDS = { portugis: "KE", spanyol: "P", belanda: "L", inggris: "MA" };
+    const COUNTRY_NAMES = {
+      portugis: "🇵🇹 PORTUGIS",
+      spanyol: "🇪🇸 SPANYOL",
+      belanda: "🇳🇱 BELANDA",
+      inggris: "🇬🇧 INGGRIS"
+    };
+
+    // Helper HTML Grafik Batang Tegak (Ringkas & Rata Tengah)
+    const GRAPH_HTML = `
+      <div class="vertical-chart-box">
+        <div class="chart-title-v">📊 GRAFIK DURASI KEKUASAAN BANGSA EROPA DI INDONESIA</div>
+        <div class="v-chart-wrapper">
+          <div class="y-axis">
+            <span>350 Thn</span>
+            <span>250 Thn</span>
+            <span>150 Thn</span>
+            <span>50 Thn</span>
+            <span>0 Thn</span>
+          </div>
+          <div class="bars-container">
+            <div class="v-bar-item">
+              <div class="v-bar" style="height: 25%;">85</div>
+            </div>
+            <div class="v-bar-item">
+              <div class="v-bar" style="height: 44%;">149</div>
+            </div>
+            <div class="v-bar-item">
+              <div class="v-bar" style="height: 97%;">340</div>
+            </div>
+            <div class="v-bar-item">
+              <div class="v-bar" style="height: 8%; min-height: 16px; color: #fff;">5</div>
+            </div>
+          </div>
+        </div>
+        <div class="x-axis">
+          <div class="x-label">🇵🇹 Portugis</div>
+          <div class="x-label">🇪🇸 Spanyol</div>
+          <div class="x-label">🇳🇱 Belanda</div>
+          <div class="x-label">🇬🇧 Inggris</div>
+        </div>
+      </div>
+    `;
+
+    const QUESTIONS_DATA = {
+      portugis: [
+        {
+          type: "TF",
+          stimulus: "Portugis merupakan salah satu bangsa Eropa yang melakukan pelayaran menuju Asia untuk mencari rempah-rempah. Dalam materi, Vasco da Gama disebut sebagai tokoh Portugis dan tahun 1498 dicatat dalam garis waktu kedatangan bangsa Eropa.",
+          items: [
+            { text: "Portugis datang ke Asia berkaitan dengan pencarian rempah-rempah.", key: true },
+            { text: "Vasco da Gama merupakan tokoh yang disebut dalam materi Portugis.", key: true },
+            { text: "Dalam garis waktu, Portugis dicatat datang pada tahun 1498.", key: true },
+            { text: "Portugis datang ke Indonesia untuk mendirikan VOC.", key: false }
+          ]
+        },
+        {
+          type: "SINGLE",
+          stimulus: "Amati grafik durasi kekuasaan bangsa-bangsa Barat di Indonesia berikut ini. Berdasarkan data grafik tersebut, bagaimana perbandingan durasi kekuasaan Portugis di Indonesia apabila dibandingkan dengan bangsa Barat lainnya?" + GRAPH_HTML,
+          options: [
+            { id: 1, text: "Portugis merupakan bangsa Barat yang paling lama berada di Indonesia.", correct: false },
+            { id: 2, text: "Durasi Portugis (85 tahun) lebih lama dari Inggris, namun lebih singkat dibandingkan Spanyol dan Belanda.", correct: true },
+            { id: 3, text: "Masa kekuasaan Portugis di Indonesia jauh lebih lama daripada masa kekuasaan Belanda.", correct: false },
+            { id: 4, text: "Lama kekuasaan Portugis sama persis dengan lama kekuasaan Spanyol.", correct: false }
+          ]
+        },
+        {
+          type: "MULTI",
+          stimulus: "Kedatangan bangsa Eropa pada awalnya berkaitan dengan pencarian rempah-rempah dan kegiatan perdagangan. Namun, dalam perkembangan berikutnya, kedatangan bangsa Eropa juga menimbulkan persaingan dan penguasaan yang berdampak pada kehidupan masyarakat Indonesia.",
+          options: [
+            { id: 1, text: "Kedatangan Portugis merupakan bagian dari kedatangan bangsa Eropa ke Indonesia.", correct: true },
+            { id: 2, text: "Rempah-rempah menjadi salah satu tujuan kedatangan bangsa Eropa.", correct: true },
+            { id: 3, text: "Kedatangan bangsa Eropa dapat memberikan dampak positif dan negatif.", correct: true },
+            { id: 4, text: "Kedatangan bangsa Eropa sama sekali tidak menimbulkan persaingan.", correct: false }
+          ]
+        }
+      ],
+      spanyol: [
+        {
+          type: "TF",
+          stimulus: "Spanyol merupakan salah satu bangsa Eropa yang melakukan pelayaran menuju wilayah penghasil rempah-rempah. Dalam materi, Ferdinand Magellan disebut sebagai tokoh Spanyol dan pelayarannya dilanjutkan oleh Juan Sebastián Elcano. Spanyol tiba di Tidore pada tahun 1521.",
+          items: [
+            { text: "Spanyol datang ke Indonesia berkaitan dengan pencarian rempah-rempah.", key: true },
+            { text: "Ferdinand Magellan merupakan tokoh yang disebut dalam materi Spanyol.", key: true },
+            { text: "Spanyol tiba di Tidore pada tahun 1521 menurut modul.", key: true },
+            { text: "Spanyol tiba di Banten pada tahun 1596.", key: false }
+          ]
+        },
+        {
+          type: "SINGLE",
+          stimulus: "Amati grafik durasi kekuasaan bangsa-bangsa Barat di Indonesia berikut ini. Berdasarkan data grafik tersebut, bagaimana perbandingan durasi kekuasaan Spanyol di Indonesia jika dibandingkan dengan bangsa Barat lainnya?" + GRAPH_HTML,
+          options: [
+            { id: 1, text: "Spanyol merupakan bangsa Barat dengan durasi kekuasaan paling singkat di Indonesia.", correct: false },
+            { id: 2, text: "Durasi Spanyol (149 tahun) lebih lama dari Portugis dan Inggris, namun masih lebih singkat dibanding Belanda.", correct: true },
+            { id: 3, text: "Masa kekuasaan Spanyol di Indonesia lebih lama daripada masa kekuasaan Belanda.", correct: false },
+            { id: 4, text: "Lama kekuasaan Spanyol sama persis dengan lama kekuasaan Inggris.", correct: false }
+          ]
+        },
+        {
+          type: "MULTI",
+          stimulus: "Bangsa-bangsa Eropa datang ke Indonesia dengan tujuan yang berkaitan dengan perdagangan dan rempah-rempah. Kedatangan mereka kemudian berkembang menjadi persaingan untuk mendapatkan keuntungan dan menguasai wilayah.",
+          options: [
+            { id: 1, text: "Spanyol merupakan salah satu bangsa Eropa yang datang ke Indonesia.", correct: true },
+            { id: 2, text: "Rempah-rempah menjadi salah satu tujuan kedatangan bangsa Eropa.", correct: true },
+            { id: 3, text: "Persaingan bangsa Eropa menjadi bagian dari perkembangan kedatangan mereka di Indonesia.", correct: true },
+            { id: 4, text: "Kedatangan bangsa Eropa hanya memberikan dampak positif bagi rakyat Indonesia.", correct: false }
+          ]
+        }
+      ],
+      belanda: [
+        {
+          type: "TF",
+          stimulus: "Belanda datang ke Indonesia untuk mencari rempah-rempah dan melakukan perdagangan. Dalam materi, Cornelis de Houtman disebut sebagai tokoh Belanda yang tiba di Banten pada tahun 1596. Pada tahun 1602, Belanda mendirikan VOC.",
+          items: [
+            { text: "Cornelis de Houtman merupakan tokoh Belanda.", key: true },
+            { text: "Belanda tiba di Banten pada tahun 1596.", key: true },
+            { text: "VOC didirikan pada tahun 1602.", key: true },
+            { text: "Belanda tiba di Indonesia pada tahun 1521.", key: false }
+          ]
+        },
+        {
+          type: "SINGLE",
+          stimulus: "Amati grafik durasi kekuasaan bangsa-bangsa Barat di Indonesia berikut ini. Berdasarkan data grafik tersebut, bagaimana perbandingan durasi kekuasaan Belanda di Indonesia jika dibandingkan dengan bangsa Barat lainnya?" + GRAPH_HTML,
+          options: [
+            { id: 1, text: "Masa kekuasaan Belanda (340 tahun) merupakan yang paling lama di Indonesia dibandingkan Portugis, Spanyol, dan Inggris.", correct: true },
+            { id: 2, text: "Durasi Belanda di Indonesia jauh lebih singkat dibandingkan dengan durasi Spanyol.", correct: false },
+            { id: 3, text: "Belanda memiliki masa kekuasaan yang sama singkatnya dengan Inggris.", correct: false },
+            { id: 4, text: "Durasi Belanda lebih lama dari Inggris, namun lebih singkat dari Portugis.", correct: false }
+          ]
+        },
+        {
+          type: "MULTI",
+          stimulus: "1596 → Belanda tiba di Banten → 1602 → VOC didirikan\n\nUrutan tersebut menunjukkan bahwa kedatangan Belanda kemudian berkembang menjadi usaha untuk menguasai perdagangan.",
+          options: [
+            { id: 1, text: "Belanda datang ke Indonesia sebelum VOC didirikan.", correct: true },
+            { id: 2, text: "Cornelis de Houtman berkaitan dengan kedatangan Belanda.", correct: true },
+            { id: 3, text: "VOC didirikan setelah Belanda datang ke Indonesia.", correct: true },
+            { id: 4, text: "VOC didirikan pada tahun 1596.", correct: false }
+          ]
+        }
+      ],
+      inggris: [
+        {
+          type: "TF",
+          stimulus: "Inggris juga datang ke Indonesia untuk kepentingan perdagangan dan mencari rempah-rempah. Dalam materi, James Lancaster disebut sebagai tokoh Inggris yang datang ke Aceh pada tahun 1613.",
+          items: [
+            { text: "James Lancaster merupakan tokoh Inggris yang disebut dalam materi.", key: true },
+            { text: "Inggris tiba di Aceh pada tahun 1613 menurut modul.", key: true },
+            { text: "Salah satu tujuan Inggris adalah berdagang.", key: true },
+            { text: "Inggris datang ke Indonesia pada tahun 1498.", key: false }
+          ]
+        },
+        {
+          type: "SINGLE",
+          stimulus: "Amati grafik durasi kekuasaan bangsa-bangsa Barat di Indonesia berikut ini. Berdasarkan data grafik tersebut, bagaimana perbandingan durasi kekuasaan Inggris di Indonesia jika dibandingkan dengan bangsa Barat lainnya?" + GRAPH_HTML,
+          options: [
+            { id: 1, text: "Inggris merupakan bangsa Barat dengan durasi kekuasaan paling lama di Indonesia.", correct: false },
+            { id: 2, text: "Masa kekuasaan Inggris jauh lebih lama jika dibandingkan dengan Portugis dan Spanyol.", correct: false },
+            { id: 3, text: "Durasi Inggris (5 tahun) merupakan yang paling singkat di antara seluruh bangsa Barat yang ada pada grafik.", correct: true },
+            { id: 4, text: "Durasi Inggris hampir menyamai durasi kekuasaan Belanda di Indonesia.", correct: false }
+          ]
+        },
+        {
+          type: "MULTI",
+          stimulus: "Bangsa-bangsa Eropa datang ke Indonesia pada waktu yang berbeda. Kedatangan tersebut awalnya berkaitan dengan perdagangan dan pencarian rempah-rempah, tetapi kemudian berkembang menjadi persaingan dan penjajahan yang memengaruhi kehidupan rakyat Indonesia.",
+          options: [
+            { id: 1, text: "Inggris datang setelah Portugis berdasarkan garis waktu dalam modul.", correct: true },
+            { id: 2, text: "James Lancaster berkaitan dengan kedatangan Inggris.", correct: true },
+            { id: 3, text: "Aceh merupakan tempat yang disebut dalam kedatangan Inggris.", correct: true },
+            { id: 4, text: "Kedatangan Inggris tidak berkaitan dengan kegiatan perdagangan.", correct: false }
+          ]
+        }
+      ]
+    };
+
+    // ==========================================================================
+    // 2. REAL-TIME AUDIO SYNTHESIZER ENGINE
+    // ==========================================================================
+    let audioCtx = null;
+    let isMusicPlaying = false;
+    let mainGainNode = null;
+
+    function startAudioEngine() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+
+        mainGainNode = audioCtx.createGain();
+        mainGainNode.gain.value = 0.5;
+        mainGainNode.connect(audioCtx.destination);
+
+        playSynthesizedAmbientMusic();
+        isMusicPlaying = true;
+        document.getElementById('btn-music').innerHTML = "🎵 Musik ON";
+      } else if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+        isMusicPlaying = true;
+        document.getElementById('btn-music').innerHTML = "🎵 Musik ON";
+      }
+    }
+
+    function playSynthesizedAmbientMusic() {
+      if (!audioCtx) return;
+      
+      const notes = [220, 261.63, 293.66, 329.63, 392.00, 440.00];
+      let step = 0;
+
+      function playNote() {
+        if (!isMusicPlaying || audioCtx.state !== 'running') return;
+
+        const osc = audioCtx.createOscillator();
+        const noteGain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+
+        noteGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+        noteGain.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.4);
+        noteGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.8);
+
+        osc.connect(noteGain);
+        noteGain.connect(mainGainNode);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 2.0);
+
+        step++;
+      }
+
+      setInterval(playNote, 800);
+    }
+
+    function toggleMusic() {
+      const btn = document.getElementById('btn-music');
+      startAudioEngine();
+      if (isMusicPlaying) {
+        audioCtx.suspend();
+        isMusicPlaying = false;
+        btn.innerHTML = "🎵 Musik OFF";
+      } else {
+        audioCtx.resume();
+        isMusicPlaying = true;
+        btn.innerHTML = "🎵 Musik ON";
+      }
+    }
+
+    function changeVolume(val) {
+      if (mainGainNode && audioCtx) {
+        mainGainNode.gain.setValueAtTime(parseFloat(val), audioCtx.currentTime);
+      }
+    }
+
+    function toggleFullscreen() {
+      const btn = document.getElementById('btn-fullscreen');
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+          btn.innerHTML = "⛶ Keluar Fullscreen";
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().then(() => {
+            btn.innerHTML = "⛶ Fullscreen";
+          });
+        }
+      }
+    }
+
+    // ==========================================================================
+    // 3. GAME STATE & NAVIGATION LOGIC
+    // ==========================================================================
+    let gameState = {
+      selectedCountry: null,
+      mission2PasswordVerified: false,
+      currentQuestion: 0,
+      answers: { q0: [null, null, null, null], q1: null, q2: [] },
+      completed: false
+    };
+
+    function showResetModal() { document.getElementById('reset-modal').style.display = 'flex'; }
+    function hideResetModal() { document.getElementById('reset-modal').style.display = 'none'; }
+
+    function confirmReset() {
+      hideResetModal();
+      gameState.selectedCountry = null;
+      gameState.mission2PasswordVerified = false;
+      gameState.currentQuestion = 0;
+      gameState.answers = { q0: [null, null, null, null], q1: null, q2: [] };
+      gameState.completed = false;
+      showScreen('screen-home');
+      updateGlobalBackBtn();
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      updateGlobalBackBtn();
+    }
+
+    function updateGlobalBackBtn() {
+      const backBtn = document.getElementById('btn-back-global');
+      const homeActive = document.getElementById('screen-home').classList.contains('active');
+      const successActive = document.getElementById('screen-success').classList.contains('active');
+      backBtn.style.display = (homeActive || successActive) ? 'none' : 'inline-flex';
+    }
+
+    function handleGlobalBack() {
+      if (document.getElementById('screen-password').classList.contains('active')) {
+        showScreen('screen-home');
+      } else if (document.getElementById('screen-questions').classList.contains('active')) {
+        showScreen('screen-password');
+      }
+    }
+
+    function selectCountry(country) {
+      gameState.selectedCountry = country;
+      gameState.answers = { q0: [null, null, null, null], q1: null, q2: [] };
+      document.getElementById('pass-country-label').innerText = COUNTRY_NAMES[country];
+      document.getElementById('pass-input').value = "";
+      document.getElementById('pass-error').innerText = "";
+      showScreen('screen-password');
+    }
+
+    function verifyPassword() {
+      const input = document.getElementById('pass-input').value.trim().toUpperCase();
+      const correctPass = MISSION2_PASSWORDS[gameState.selectedCountry].toUpperCase();
+      const errBox = document.getElementById('pass-error');
+
+      if (input === correctPass) {
+        gameState.mission2PasswordVerified = true;
+        errBox.innerText = "";
+        startQuestions();
+      } else {
+        errBox.innerText = "Password belum tepat. Coba ingat kembali hasil Misi 2!";
+      }
+    }
+
+    function startQuestions() {
+      gameState.currentQuestion = 0;
+      showScreen('screen-questions');
+      renderQuestion();
+      updateProgress();
+    }
+
+    function switchQuestion(index) {
+      gameState.currentQuestion = index;
+      renderQuestion();
+    }
+
+    function prevQuestion() {
+      if (gameState.currentQuestion > 0) {
+        gameState.currentQuestion--;
+        renderQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (gameState.currentQuestion < 2) {
+        gameState.currentQuestion++;
+        renderQuestion();
+      }
+    }
+
+    function renderQuestion() {
+      const countryData = QUESTIONS_DATA[gameState.selectedCountry];
+      const qIndex = gameState.currentQuestion;
+      const qData = countryData[qIndex];
+
+      document.getElementById('validation-alert').style.display = 'none';
+
+      for (let i = 0; i < 3; i++) {
+        const tab = document.getElementById(`tab-${i}`);
+        tab.className = 'nav-tab';
+        if (i === qIndex) tab.classList.add('active');
+        if (isQuestionAnswered(i)) tab.classList.add('completed');
+      }
+
+      document.getElementById('stimulus-container').innerHTML = `<div class="stimulus-box">${qData.stimulus}</div>`;
+      
+      const hintBox = document.getElementById('multi-hint');
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+
+      if (qData.type === 'TF') {
+        hintBox.style.display = 'none';
+        qData.items.forEach((item, idx) => {
+          const val = gameState.answers.q0[idx];
+          const div = document.createElement('div');
+          div.className = 'option-item';
+          div.innerHTML = `
+            <span class="option-text">${idx + 1}. ${item.text}</span>
+            <div class="tf-toggle">
+              <button class="btn-tf ${val === true ? 'selected-true' : ''}" onclick="selectTF(${idx}, true)">BENAR</button>
+              <button class="btn-tf ${val === false ? 'selected-false' : ''}" onclick="selectTF(${idx}, false)">SALAH</button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } else if (qData.type === 'SINGLE') {
+        hintBox.style.display = 'block';
+        hintBox.innerHTML = '💡 * Keterangan: Pilih 1 jawaban yang paling tepat.';
+        const currentAns = gameState.answers.q1;
+        qData.options.forEach((opt) => {
+          const isSelected = (currentAns === opt.id);
+          const div = document.createElement('div');
+          div.className = `option-item chk-option ${isSelected ? 'selected' : ''}`;
+          div.onclick = () => selectSingleOption(opt.id);
+          div.innerHTML = `
+            <span class="option-text">${opt.text}</span>
+            <div class="custom-radio"></div>
+          `;
+          container.appendChild(div);
+        });
+      } else if (qData.type === 'MULTI') {
+        hintBox.style.display = 'block';
+        hintBox.innerHTML = '💡 * Keterangan: Jawaban boleh lebih dari satu.';
+        const currentAns = gameState.answers.q2 || [];
+        qData.options.forEach((opt) => {
+          const isSelected = currentAns.includes(opt.id);
+          const div = document.createElement('div');
+          div.className = `option-item chk-option ${isSelected ? 'selected' : ''}`;
+          div.onclick = () => toggleMultiOption(opt.id);
+          div.innerHTML = `
+            <span class="option-text">${opt.text}</span>
+            <div class="custom-checkbox"></div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      document.getElementById('btn-prev-q').disabled = (qIndex === 0);
+      if (qIndex === 2) {
+        document.getElementById('btn-next-q').style.display = 'none';
+        document.getElementById('btn-submit-q').style.display = 'inline-flex';
+      } else {
+        document.getElementById('btn-next-q').style.display = 'inline-flex';
+        document.getElementById('btn-submit-q').style.display = 'none';
+      }
+    }
+
+    function selectTF(itemIndex, value) {
+      gameState.answers.q0[itemIndex] = value;
+      renderQuestion();
+      updateProgress();
+    }
+
+    function selectSingleOption(optionId) {
+      gameState.answers.q1 = optionId;
+      renderQuestion();
+      updateProgress();
+    }
+
+    function toggleMultiOption(optionId) {
+      let list = gameState.answers.q2 || [];
+      if (list.includes(optionId)) {
+        list = list.filter(id => id !== optionId);
+      } else {
+        list.push(optionId);
+      }
+      gameState.answers.q2 = list;
+      renderQuestion();
+      updateProgress();
+    }
+
+    function isQuestionAnswered(qIndex) {
+      if (qIndex === 0) {
+        return gameState.answers.q0.every(ans => ans !== null);
+      } else if (qIndex === 1) {
+        return gameState.answers.q1 !== null;
+      } else {
+        const list = gameState.answers.q2;
+        return Array.isArray(list) && list.length > 0;
+      }
+    }
+
+    function updateProgress() {
+      let count = 0;
+      for (let i = 0; i < 3; i++) {
+        if (isQuestionAnswered(i)) count++;
+      }
+      const percent = Math.round((count / 3) * 100);
+      document.getElementById('progress-bar').style.width = `${percent}%`;
+      document.getElementById('progress-text').innerText = `${count} / 3 SOAL SELESAI`;
+    }
+
+    // ==========================================================================
+    // 4. PENILAIAN & FEEDBACK
+    // ==========================================================================
+    function submitAnswers() {
+      const alertBox = document.getElementById('validation-alert');
+      alertBox.style.display = 'none';
+
+      let hasUnanswered = false;
+      for (let i = 0; i < 3; i++) {
+        if (!isQuestionAnswered(i)) {
+          hasUnanswered = true;
+          break;
+        }
+      }
+
+      if (hasUnanswered) {
+        alertBox.innerText = "Mohon maaf, terdapat soal yang belum dijawab. Mohon periksa kembali seluruh pertanyaan!";
+        alertBox.style.display = 'block';
+        return;
+      }
+
+      const countryData = QUESTIONS_DATA[gameState.selectedCountry];
+      let wrongQuestions = [];
+
+      // Soal 1 (TF)
+      const q0Data = countryData[0].items;
+      const q0User = gameState.answers.q0;
+      let q0Correct = true;
+      for (let i = 0; i < q0Data.length; i++) {
+        if (q0User[i] !== q0Data[i].key) { q0Correct = false; break; }
+      }
+      if (!q0Correct) wrongQuestions.push(1);
+
+      // Soal 2 (Single Choice)
+      const q1CorrectOpt = countryData[1].options.find(o => o.correct).id;
+      if (gameState.answers.q1 !== q1CorrectOpt) wrongQuestions.push(2);
+
+      // Soal 3 (Multi)
+      const q2Data = countryData[2].options.filter(o => o.correct).map(o => o.id).sort();
+      const q2User = [...gameState.answers.q2].sort();
+      if (JSON.stringify(q2Data) !== JSON.stringify(q2User)) wrongQuestions.push(3);
+
+      if (wrongQuestions.length > 0) {
+        let wrongNosText = wrongQuestions.join(", ");
+        alertBox.innerText = `Mohon maaf, masih terdapat kekeliruan pada Soal No: ${wrongNosText}. Password Mission 4 tidak didapatkan. Silakan periksa kembali jawabanmu pada nomor tersebut!`;
+        alertBox.style.display = 'block';
+      } else {
+        gameState.completed = true;
+        document.getElementById('success-country-name').innerText = COUNTRY_NAMES[gameState.selectedCountry];
+        document.getElementById('mission4-password').innerText = MISSION4_PASSWORDS[gameState.selectedCountry];
+        showScreen('screen-success');
+      }
+    }
+
+    function nextMission() {
+      showScreen('screen-home');
+    }
+
+    updateGlobalBackBtn();
+  </script>
+</body>
+</html>
